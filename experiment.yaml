@@ -1,0 +1,53 @@
+apiVersion: "kubeflow.org/v1alpha3"
+kind: Experiment
+metadata:
+  namespace: kubeflow
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: cmaes-example
+spec:
+  objective:
+    type: maximize
+    goal: 0.99
+    objectiveMetricName: Validation-accuracy
+    additionalMetricNames:
+      - Train-accuracy
+  algorithm:
+    algorithmName: cma-es
+  parallelTrialCount: 2
+  maxTrialCount: 10
+  maxFailedTrialCount: 3
+  parameters:
+    - name: --x1
+      parameterType: double
+      feasibleSpace:
+        min: "-10"
+        max: "10"
+    - name: --x2
+      parameterType: double
+      feasibleSpace:
+        min: "-10"
+        max: "10"
+  trialTemplate:
+    goTemplate:
+        rawTemplate: |-
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: {{.Trial}}
+            namespace: {{.NameSpace}}
+          spec:
+            template:
+              spec:
+                containers:
+                - name: {{.Trial}}
+                  image: docker.io/cbata/hello-katib-quadratic-function
+                  command:
+                  - "python3"
+                  - "main.py"
+                  {{- with .HyperParameters}}
+                  {{- range .}}
+                  - "{{.Name}}={{.Value}}"
+                  {{- end}}
+                  {{- end}}
+                restartPolicy: Never
