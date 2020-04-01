@@ -13,17 +13,17 @@ spec:
     additionalMetricNames:
       - Train-accuracy
   algorithm:
-    algorithmName: cma-es
+    algorithmName: random
   parallelTrialCount: 2
   maxTrialCount: 10
   maxFailedTrialCount: 3
   parameters:
-    - name: --x1
+    - name: x1
       parameterType: double
       feasibleSpace:
         min: "-10"
         max: "10"
-    - name: --x2
+    - name: x2
       parameterType: double
       feasibleSpace:
         min: "-10"
@@ -47,7 +47,7 @@ spec:
                   - "main.py"
                   {{- with .HyperParameters}}
                   {{- range .}}
-                  - "{{.Name}}={{.Value}}"
+                  - "--{{.Name}} {{.Value}}"
                   {{- end}}
                   {{- end}}
                 restartPolicy: Never
