@@ -9,9 +9,7 @@ spec:
   objective:
     type: maximize
     goal: 0.99
-    objectiveMetricName: Validation-accuracy
-    additionalMetricNames:
-      - Train-accuracy
+    objectiveMetricName: accuracy
   algorithm:
     algorithmName: random
   metricsCollectorSpec:
