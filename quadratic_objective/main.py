@@ -14,10 +14,9 @@ def main():
 
     evaluation = (args.x1 - 5) ** 2 + (args.x2 + 5) ** 2
 
-    metric_msg = f'{{metricName: accuracy, metricValue: {evaluation:.4f}}};'
+    metric_msg = f'{{metricName: evaluation, metricValue: {evaluation:.4f}}};'
+    logging.info(metric_msg)
     print(metric_msg)
-
-    logging.info(f'{metric_msg}\n')
 
 
 if __name__ == '__main__':

@@ -7,9 +7,9 @@ metadata:
   name: cmaes-example
 spec:
   objective:
-    type: maximize
-    goal: 0.99
-    objectiveMetricName: accuracy
+    type: minimize
+    goal: 0.0001
+    objectiveMetricName: evaluation
   algorithm:
     algorithmName: cmaes
   metricsCollectorSpec:
