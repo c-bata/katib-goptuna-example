@@ -17,7 +17,7 @@ def main():
     metric_msg = f'{{metricName: accuracy, metricValue: {evaluation:.4f}}};'
     print(metric_msg)
 
-    logging.info(f'\n{metric_msg}\n')
+    logging.info(f'{metric_msg}\n')
 
 
 if __name__ == '__main__':
