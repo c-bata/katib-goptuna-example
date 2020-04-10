@@ -4,7 +4,7 @@ metadata:
   namespace: kubeflow
   labels:
     controller-tools.k8s.io: "1.0"
-  name: cmaes-example
+  name: example
 spec:
   objective:
     type: minimize
@@ -22,7 +22,7 @@ spec:
         kind: File
     collector:
       kind: File
-  parallelTrialCount: 250
+  parallelTrialCount: 2
   maxTrialCount: 250
   maxFailedTrialCount: 3
   parameters:
