@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: katib-config
+  namespace: kubeflow
+data:
+  metrics-collector-sidecar: |-
+    {
+      "StdOut": {
+        "image": "gcr.io/kubeflow-images-public/katib/v1alpha3/file-metrics-collector"
+      },
+      "File": {
+        "image": "asia.gcr.io/cyberagent-263/katib-v1alpha3-file-metricscollector"
+      },
+      "TensorFlowEvent": {
+        "image": "gcr.io/kubeflow-images-public/katib/v1alpha3/tfevent-metrics-collector",
+        "resources": {
+          "limits": {
+            "memory": "1Gi"
+          }
+        }
+      }
+    }
+  suggestion: |-
+    {
+      "random": {
+        "image": "asia.gcr.io/cyberagent-263/katib-v1alpha3-suggestion-hyperopt"
+      },
+      "grid": {
+        "image": "gcr.io/kubeflow-images-public/katib/v1alpha3/suggestion-chocolate"
+      },
+      "hyperband": {
+        "image": "gcr.io/kubeflow-images-public/katib/v1alpha3/suggestion-hyperband"
+      },
+      "bayesianoptimization": {
+        "image": "gcr.io/kubeflow-images-public/katib/v1alpha3/suggestion-skopt"
+      },
+      "tpe": {
+        "imagePullPolicy": "Always",
+        "image": "asia.gcr.io/cyberagent-263/katib-v1alpha3-suggestion-goptuna"
+      },
+      "cmaes": {
+        "imagePullPolicy": "Always",
+        "image": "asia.gcr.io/cyberagent-263/katib-v1alpha3-suggestion-goptuna"
+      },
+      "nasrl": {
+        "image": "gcr.io/kubeflow-images-public/katib/v1alpha3/suggestion-nasrl",
+        "imagePullPolicy": "Always",
+        "resources": {
+          "limits": {
+            "memory": "200Mi"
+          }
+        }
+      }
+    }
+
