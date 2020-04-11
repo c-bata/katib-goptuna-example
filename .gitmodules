@@ -1,3 +1,0 @@
-[submodule "katib"]
-	path = katib
-	url = git@github.com:c-bata/katib.git
