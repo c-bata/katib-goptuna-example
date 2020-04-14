@@ -1,0 +1,63 @@
+apiVersion: "kubeflow.org/v1alpha3"
+kind: Experiment
+metadata:
+  namespace: kubeflow
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: example
+spec:
+  objective:
+    type: minimize
+    goal: 0.0001
+    objectiveMetricName: evaluation
+  algorithm:
+    algorithmName: cmaes
+  metricsCollectorSpec:
+    source:
+      filter:
+        metricsFormat:
+          - "{metricName: ([\\w|-]+), metricValue: ((-?\\d+)(\\.\\d+)?)}"
+      fileSystemPath:
+        path: "/var/log/katib.log"
+        kind: File
+    collector:
+      kind: File
+  parallelTrialCount: 2
+  maxTrialCount: 250
+  maxFailedTrialCount: 3
+  parameters:
+    - name: x1
+      parameterType: int
+      feasibleSpace:
+        min: "-15"
+        max: "15"
+        step: "2"
+    - name: x2
+      parameterType: double
+      feasibleSpace:
+        min: "-10"
+        max: "10"
+        step: 0.5
+  trialTemplate:
+    goTemplate:
+        rawTemplate: |-
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            name: {{.Trial}}
+            namespace: {{.NameSpace}}
+          spec:
+            template:
+              spec:
+                containers:
+                - name: {{.Trial}}
+                  image: docker.io/cbata/hello-katib-quadratic-function
+                  command:
+                  - "python3"
+                  - "main.py"
+                  {{- with .HyperParameters}}
+                  {{- range .}}
+                  - "--{{.Name}} {{.Value}}"
+                  {{- end}}
+                  {{- end}}
+                restartPolicy: Never
